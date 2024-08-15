@@ -16,5 +16,9 @@
     "fastify": "^4.28.1",
     "sequelize": "^6.37.3",
     "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "pino-pretty": "^11.2.2",
+    "tap": "^21.0.1"
   }
 }
