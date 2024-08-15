@@ -1,4 +1,6 @@
-const app = require('fastify')({ logger: true });
+const app = require('fastify')({
+    logger: true
+});
 const cors = require('@fastify/cors');
 
 const productosRouter = require('./productos/productos-router');
