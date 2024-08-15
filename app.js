@@ -17,7 +17,7 @@ app.register(cors, {
     allowedHeaders: ['Content-Type', 'Authorization'] // Headers permitidos
 });
 
-app.register(productosRouter, { prefix: '/api' });
+app.register(productosRouter, { prefix: '/api/productos' });
 
 
 module.exports = app;
