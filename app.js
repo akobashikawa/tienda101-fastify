@@ -12,18 +12,11 @@ const app = fastify({
 const cors = require('@fastify/cors');
 
 const modelsConfig = require('./models-config');
-const sequelizePlugin = require('./plugins/sequelize');
-
+const sequelizePlugin = require('./plugins/sequelize-plugin');
+const repositoriesPlugin = require('./plugins/repositories-plugin');
+const servicesPlugin = require('./plugins/services-plugin');
 const productosRouter = require('./productos/productos-router');
 
-
-app.register(sequelizePlugin, {
-    sequelizeOptions: {
-        dialect: 'sqlite',
-        storage: ':memory:',
-    },
-    modelsConfig
-});
 
 // Configurar CORS
 app.register(cors, {
@@ -32,14 +25,33 @@ app.register(cors, {
     allowedHeaders: ['Content-Type', 'Authorization'] // Headers permitidos
 });
 
-// app.decorate('models', {});
+
+// set app.sequelize
+// set app.models
+app.register(sequelizePlugin, {
+    sequelizeOptions: {
+        dialect: 'sqlite',
+        storage: ':memory:',
+    },
+    modelsConfig
+});
+
+// uses app.models
+// set app.repositories
+app.register(repositoriesPlugin);
+
+// uses app.repositories
+// set app.services
+app.register(servicesPlugin);
+
+// uses app.services
+app.register(productosRouter, { prefix: '/api/productos' });
 
 app.addHook('onReady', () => {
     const sequelize = app.sequelize;
     sequelize.sync();
 });
 
-app.register(productosRouter, { prefix: '/api/productos' });
 
 app.ready()
     .then(() => {
