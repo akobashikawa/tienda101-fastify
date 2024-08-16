@@ -1,7 +1,7 @@
 const fp = require('fastify-plugin');
 const { Sequelize } = require('sequelize');
 
-async function sequelizePlugin(fastify, options) {
+async function modelsPlugin(fastify, options) {
 
     const sequelize = new Sequelize(options.sequelizeOptions);
 
@@ -21,4 +21,4 @@ async function sequelizePlugin(fastify, options) {
 
 }
 
-module.exports = fp(sequelizePlugin);
+module.exports = fp(modelsPlugin);
