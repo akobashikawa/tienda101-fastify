@@ -11,7 +11,6 @@ const app = fastify({
 });
 const cors = require('@fastify/cors');
 
-const modelsConfig = require('./plugins/models-config');
 const modelsPlugin = require('./plugins/models-plugin');
 const repositoriesPlugin = require('./plugins/repositories-plugin');
 const servicesPlugin = require('./plugins/services-plugin');
@@ -28,13 +27,7 @@ app.register(cors, {
 
 // set app.sequelize
 // set app.models
-app.register(modelsPlugin, {
-    sequelizeOptions: {
-        dialect: 'sqlite',
-        storage: ':memory:',
-    },
-    modelsConfig
-});
+app.register(modelsPlugin);
 
 // uses app.models
 // set app.repositories

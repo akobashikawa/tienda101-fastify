@@ -1,9 +1,8 @@
 const fp = require('fastify-plugin');
-const { Sequelize } = require('sequelize');
+const sequelize = require('./sequelize-config');
+const modelsConfig = require('./models-config');
 
 async function modelsPlugin(fastify, options) {
-
-    const sequelize = new Sequelize(options.sequelizeOptions);
 
     fastify.decorate('sequelize', sequelize);
 
@@ -12,7 +11,7 @@ async function modelsPlugin(fastify, options) {
         await sequelize.authenticate();
         fastify.log.info('sequelize OK');
 
-        const models = options.modelsConfig(sequelize);
+        const models = modelsConfig(sequelize);
         fastify.decorate('models', models);
         fastify.log.info('models OK');
     } catch (error) {
