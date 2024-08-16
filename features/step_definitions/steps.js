@@ -1,16 +1,16 @@
-const { Before, After, Given, When, Then } = require('@cucumber/cucumber');
+const { BeforeAll, AfterAll, Before, After, Given, When, Then } = require('@cucumber/cucumber');
 const { assertThat, is, not, containsString } = require('hamjest');
 // const sinon = require('sinon');
 // const puppeteer = require('puppeteer');
 // const { app } = require('../../server');
 const app = require('../../app');
 
-Before(async function () {
+BeforeAll(async function () {
     // browser = await puppeteer.launch();
     // page = await browser.newPage();
 });
 
-After(async function () {
+AfterAll(async function () {
     // await browser.close();
     await app.close();
 });
