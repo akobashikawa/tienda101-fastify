@@ -18,6 +18,7 @@
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
+    "nyc": "^17.0.0",
     "pino-pretty": "^11.2.2",
     "tap": "^21.0.1"
   }
