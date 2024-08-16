@@ -11,9 +11,19 @@ const app = fastify({
 });
 const cors = require('@fastify/cors');
 
+const modelsConfig = require('./models-config');
 const sequelizePlugin = require('./plugins/sequelize');
 
-app.register(sequelizePlugin);
+const productosRouter = require('./productos/productos-router');
+
+
+app.register(sequelizePlugin, {
+    sequelizeOptions: {
+        dialect: 'sqlite',
+        storage: ':memory:',
+    },
+    modelsConfig
+});
 
 // Configurar CORS
 app.register(cors, {
@@ -29,7 +39,6 @@ app.addHook('onReady', () => {
     sequelize.sync();
 });
 
-const productosRouter = require('./productos/productos-router');
 app.register(productosRouter, { prefix: '/api/productos' });
 
 app.ready()

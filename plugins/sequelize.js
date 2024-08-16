@@ -1,20 +1,23 @@
 const fp = require('fastify-plugin');
-const sequelize = require('../sequelize-config');
+const { Sequelize } = require('sequelize');
 
 async function sequelizePlugin(fastify, options) {
-  fastify.decorate('sequelize', sequelize);
 
-  // Conectar a la base de datos
-  try {
-    await sequelize.authenticate();
-    fastify.log.info('sequelize OK');
+    const sequelize = new Sequelize(options.sequelizeOptions);
 
-    const models = require('../models')(sequelize);
-    fastify.decorate('models', models);
-    fastify.log.info('models OK');
-  } catch (error) {
-    fastify.log.error('sequelize KO: ', error);
-  }
+    fastify.decorate('sequelize', sequelize);
+
+    // Conectar a la base de datos
+    try {
+        await sequelize.authenticate();
+        fastify.log.info('sequelize OK');
+
+        const models = options.modelsConfig(sequelize);
+        fastify.decorate('models', models);
+        fastify.log.info('models OK');
+    } catch (error) {
+        fastify.log.error('sequelize KO: ', error);
+    }
 
 }
 
