@@ -1,26 +1,29 @@
-const { Given, When, Then } = require('@cucumber/cucumber');
-const { chai, chaiHttp, expect } = require('./test-config.js');
+const { Before, After, Given, When, Then } = require('@cucumber/cucumber');
+const { assertThat, is, not, containsString } = require('hamjest');
+const sinon = require('sinon');
+const puppeteer = require('puppeteer');
+const server = require('../../server');
 
-const fastify = require('../../app.js');
+Before(async function () {
 
+});
 
-Given('que el servicio está corriendo', function () {
-    // Write code here that turns the phrase above into concrete actions
+After(async function () {
+ 
+});
+
+Given('que el servicio está corriendo', async function () {
     return 'pending';
 });
 
-When('hago una solicitud a {string}', function (route) {
-    // Write code here that turns the phrase above into concrete actions
+When('hago una solicitud a {string}', async function (route) {
     return 'pending';
 });
 
-Then('debería recibir una respuesta con un código de estado {int}', function (code) {
-    // Then('debería recibir una respuesta con un código de estado {float}', function (float) {
-    // Write code here that turns the phrase above into concrete actions
+Then('debería recibir una respuesta con un código de estado {int}', function (statusCode) {
     return 'pending';
 });
 
 Then('la respuesta debería contener una lista de productos', function () {
-    // Write code here that turns the phrase above into concrete actions
     return 'pending';
 });
