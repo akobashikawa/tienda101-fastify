@@ -1,6 +1,6 @@
 class ProductosRepository {
 
-    constructor({ ProductoModel }) {console.log(ProductoModel)
+    constructor({ ProductoModel }) {
         this.ProductoModel = ProductoModel;
     }
 
