@@ -1,13 +1,14 @@
 const fastify = require('fastify');
 const app = fastify({
-    logger: {
-        level: 'info',
-        transport: {
-            target: 'pino-pretty',
-            options: {
-            },
-        }
-    }
+    // logger: {
+    //     level: 'info',
+    //     transport: {
+    //         target: 'pino-pretty',
+    //         options: {
+    //         },
+    //     }
+    // },
+    logger: true,
 });
 const cors = require('@fastify/cors');
 
