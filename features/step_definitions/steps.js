@@ -36,7 +36,7 @@ Then('la respuesta debería contener una lista de productos', async function () 
     assertThat(Array.isArray(this.responseBody), is(true));
 });
 
-When('hago una solicitud POST a {string} con el siguiente cuerpo', async function (route, body) {
+When('hago una solicitud POST a {string} con el siguiente cuerpo:', async function (route, body) {
     // this.response = await page.evaluate(async (route, body) => {
     //     const res = await fetch(`http://localhost:3000${route}`, {
     //         method: 'POST',
@@ -71,4 +71,21 @@ Given('que existe un producto con id {int}', async function (id) {
 
 Then('la respuesta debería contener un producto con el id {int}', async function (id) {
     assertThat(this.responseBody, hasProperty('id', id));
+});
+
+When('hago una solicitud PUT a {string} con el siguiente payload:', async function (route, body) {
+    this.response = await app.inject({
+        method: 'PUT',
+        url: route,
+        payload: JSON.parse(body),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    this.responseBody = await this.response.json();
+});
+
+Then('la respuesta debería contener el producto con id {int} actualizado con nombre {string}', async function (id, nombre) {
+    assertThat(this.responseBody, hasProperty('id', id));
+    assertThat(this.responseBody, hasProperty('nombre', nombre));
 });

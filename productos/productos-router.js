@@ -6,6 +6,7 @@ async function productosRouter(fastify, options) {
   fastify.get('/', (request, reply) => productosController.getItems(request, reply));
   fastify.get('/:id', (request, reply) => productosController.getItemById(request, reply));
   fastify.post('/', (request, reply) => productosController.createItem(request, reply));
+  fastify.put('/:id', (request, reply) => productosController.updateItem(request, reply));
 }
 
 module.exports = productosRouter;

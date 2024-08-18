@@ -17,11 +17,11 @@ class ProductosService {
     }
 
     async createItem(data) {
-        if (!data.nombre || data.precio < 0) {
-            throw new Error('Datos inválidos');
-        }
-
         return this.productosRepository.createItem(data);
+    }
+
+    async updateItem(id, data) {
+        return this.productosRepository.updateItem(id, data);
     }
 
 }

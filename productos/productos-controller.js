@@ -44,6 +44,28 @@ class ProductosController {
             reply.code(500).send({ error: error.message });
         }
     }
+
+    async updateItem(request, reply) {
+        try {
+            const id = request.params.id;
+            const { nombre, precio, costo, inventario } = request.body;
+
+            if (!nombre || precio < 0) {
+                reply.code(400).send({ error: 'Datos inválidos' });
+                return;
+            }
+
+            const updatedItem = await this.productosService.updateItem(id, { nombre, precio, costo, inventario });
+            if (updatedItem) {
+                reply.send(updatedItem);
+            } else {
+                reply.status(404).send({ error: 'Producto no encontrado' });
+            }
+        } catch (error) {
+            request.log.error(error);
+            reply.code(500).send({ error: error.message });
+        }
+    }
 }
 
 module.exports = ProductosController;

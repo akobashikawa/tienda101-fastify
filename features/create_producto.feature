@@ -3,7 +3,7 @@ Característica: Crear producto
 
   Escenario: Crear un nuevo producto exitosamente
     Dado que el servicio está corriendo
-    Cuando hago una solicitud POST a "/api/productos" con el siguiente cuerpo
+    Cuando hago una solicitud POST a "/api/productos" con el siguiente cuerpo:
       """
       {
       "nombre": "Producto Nuevo",

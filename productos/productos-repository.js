@@ -18,6 +18,14 @@ class ProductosRepository {
         return this.ProductoModel.create(data);
     }
 
+    async updateItem(id, data) {
+        const item = await this.ProductoModel.findByPk(id);
+        if (item) {
+            return await item.update(data);
+        }
+        return null;
+    }
+
 }
 
 module.exports = ProductosRepository;
