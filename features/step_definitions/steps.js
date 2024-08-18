@@ -1,5 +1,5 @@
 const { BeforeAll, AfterAll, Before, After, Given, When, Then } = require('@cucumber/cucumber');
-const { assertThat, is, not, containsString, hasProperty  } = require('hamjest');
+const { assertThat, is, not, containsString, hasProperty } = require('hamjest');
 // const sinon = require('sinon');
 // const puppeteer = require('puppeteer');
 // const { app } = require('../../server');
@@ -62,4 +62,13 @@ When('hago una solicitud POST a {string} con el siguiente cuerpo', async functio
 Then('la respuesta debería contener un producto con el nombre {string} y precio {float}', async function (nombre, precio) {
     assertThat(this.responseBody, hasProperty('nombre', nombre));
     assertThat(this.responseBody, hasProperty('precio', precio));
+});
+
+Given('que existe un producto con id {int}', async function (id) {
+    const data = { nombre: 'Producto Nuevo', precio: 123.40, costo: 100.00, inventario: 20 };
+    await app.services.productosService.createItem(data);
+});
+
+Then('la respuesta debería contener un producto con el id {int}', async function (id) {
+    assertThat(this.responseBody, hasProperty('id', id));
 });

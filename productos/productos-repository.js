@@ -9,6 +9,11 @@ class ProductosRepository {
         return items;
     }
 
+    async getItemById(id) {
+        const item = await this.ProductoModel.findByPk(id);
+        return item;
+    }
+
     async createItem(data) {
         return this.ProductoModel.create(data);
     }

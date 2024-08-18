@@ -12,6 +12,10 @@ class ProductosService {
         return this.productosRepository.getItems();
     }
 
+    async getItemById(id) {
+        return this.productosRepository.getItemById(id);
+    }
+
     async createItem(data) {
         if (!data.nombre || data.precio < 0) {
             throw new Error('Datos inválidos');

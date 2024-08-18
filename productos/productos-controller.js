@@ -13,6 +13,21 @@ class ProductosController {
         }
     }
 
+    async getItemById(request, reply) {
+        try {
+            const id = request.params.id;
+            const item = await this.productosService.getItemById(id);
+            if (item) {
+                reply.send(item);
+            } else {
+                reply.status(404).send({ error: 'Product not found' });
+            }
+        } catch (error) {
+            request.log.error(error);
+            reply.code(500).send({ error: error.message });
+        }
+    }
+
     async createItem(request, reply) {
         try {
             const { nombre, precio, costo, inventario } = request.body;
