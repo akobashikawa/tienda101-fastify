@@ -9,6 +9,10 @@ class ProductosRepository {
         return items;
     }
 
+    async createItem(data) {
+        return this.ProductoModel.create(data);
+    }
+
 }
 
 module.exports = ProductosRepository;
