@@ -13,7 +13,21 @@
 - Los services contienen la business logic
 - Los services idealmente son agnósticos a la interface de usuario y a la interface de datos
 
+## curl
+
 ```sh
+# get all
 curl http://localhost:3000/api/productos
-curl -X POST http://localhost:3000/api/productos -H "Content-Type: application/json" -d '{"nombre": "Producto", "precio": 123.4}'
+
+# create
+curl -X POST http://localhost:3000/api/productos -H "Content-Type: application/json" -d '{"nombre": "Producto Nuevo", "precio": 123.4, "costo": 100.00, "inventario": 20}'
+
+# get
+curl http://localhost:3000/api/productos/1
+
+# update
+curl -X PUT http://localhost:3000/api/productos/1 -H "Content-Type: application/json" -d '{"nombre": "Producto Actualizado", "precio": 200.00, "costo": 100.00, "inventario": 30}'
+
+# delete
+curl -X DELETE http://localhost:3000/api/productos/1 
 ```

@@ -29,4 +29,4 @@ Característica: Actualizar producto
       }
       """
     Entonces debería recibir una respuesta con un código de estado 404
-    Y la respuesta debería contener un mensaje de error "Producto no encontrado"
+    Y la respuesta debería contener el mensaje de error "Producto no encontrado"

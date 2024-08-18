@@ -126,6 +126,10 @@ Then('el producto con id {int} ya no debería existir en la base de datos', asyn
     assertThat(producto, is(null));
 });
 
-Then('la respuesta debería contener un mensaje de error {string}', async function (message) {
+Then('la respuesta debería contener el mensaje {string}', async function (message) {
+    assertThat(this.responseBody, hasProperty('message', message));
+});
+
+Then('la respuesta debería contener el mensaje de error {string}', async function (message) {
     assertThat(this.responseBody, hasProperty('error', message));
 });
