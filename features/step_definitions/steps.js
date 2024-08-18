@@ -22,7 +22,6 @@ Given('que el servicio está corriendo', async function () {
 When('hago una solicitud a {string}', async function (route) {
     // this.response = await page.goto(`http://localhost:3000${route}`, { waitUntil: 'networkidle0' });
     this.response = await app.inject({ url: `http://localhost:3000${route}` });
-    this.responseBody = await this.response.json();
 });
 
 Then('debería recibir una respuesta con un código de estado {int}', function (statusCode) {
@@ -33,5 +32,6 @@ Then('debería recibir una respuesta con un código de estado {int}', function (
 Then('la respuesta debería contener una lista de productos', async function () {
     // const body = await this.response.text();
     // assertThat(body, containsString('productos'));
+    this.responseBody = await this.response.json();
     assertThat(Array.isArray(this.responseBody), is(true));
 });
