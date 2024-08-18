@@ -26,6 +26,14 @@ class ProductosRepository {
         return null;
     }
 
+    async deleteItem(id) {
+        const item = await this.ProductoModel.findByPk(id);
+        if (item) {
+            return await item.destroy();
+        }
+        return null;
+    }
+
 }
 
 module.exports = ProductosRepository;

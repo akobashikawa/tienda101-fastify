@@ -24,6 +24,10 @@ class ProductosService {
         return this.productosRepository.updateItem(id, data);
     }
 
+    async deleteItem(id) {
+        return this.productosRepository.deleteItem(id);
+    }
+
 }
 
 module.exports = ProductosService;

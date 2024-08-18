@@ -5,6 +5,11 @@ const { assertThat, is, not, containsString, hasProperty } = require('hamjest');
 // const { app } = require('../../server');
 const app = require('../../app');
 
+async function resetTable() {
+    await app.sequelize.query('DELETE FROM Productos');
+    await app.sequelize.query('DELETE FROM sqlite_sequence WHERE name="Productos"');
+}
+
 BeforeAll(async function () {
     // browser = await puppeteer.launch();
     // page = await browser.newPage();
@@ -15,11 +20,19 @@ AfterAll(async function () {
     await app.close();
 });
 
+Before(async function () {
+    await resetTable();
+});
+
+After(async function() {
+    
+});
+
 Given('que el servicio está corriendo', async function () {
 
 });
 
-When('hago una solicitud a {string}', async function (route) {
+When('hago una solicitud GET a {string}', async function (route) {
     // this.response = await page.goto(`http://localhost:3000${route}`, { waitUntil: 'networkidle0' });
     this.response = await app.inject({ url: `http://localhost:3000${route}` });
     this.responseBody = await this.response.json();
@@ -34,6 +47,15 @@ Then('la respuesta debería contener una lista de productos', async function () 
     // const body = await this.response.text();
     // assertThat(body, containsString('productos'));
     assertThat(Array.isArray(this.responseBody), is(true));
+});
+
+
+Given('que existe un producto con id {int}', async function (id) {
+    let producto = await app.services.productosService.getItemById(id);
+    if (!producto) {
+        producto = await app.services.productosService.createItem({ nombre: 'Producto Nuevo', precio: 123.40, costo: 100.00, inventario: 20 });
+    }
+    assertThat(producto.id, id);
 });
 
 When('hago una solicitud POST a {string} con el siguiente cuerpo:', async function (route, body) {
@@ -64,13 +86,14 @@ Then('la respuesta debería contener un producto con el nombre {string} y precio
     assertThat(this.responseBody, hasProperty('precio', precio));
 });
 
-Given('que existe un producto con id {int}', async function (id) {
-    const data = { nombre: 'Producto Nuevo', precio: 123.40, costo: 100.00, inventario: 20 };
-    await app.services.productosService.createItem(data);
-});
 
 Then('la respuesta debería contener un producto con el id {int}', async function (id) {
     assertThat(this.responseBody, hasProperty('id', id));
+});
+
+Given('que no existe un producto con id {int}', async function (id) {
+    let producto = await app.services.productosService.getItemById(id);
+    assertThat(producto, null);
 });
 
 When('hago una solicitud PUT a {string} con el siguiente payload:', async function (route, body) {
@@ -88,4 +111,21 @@ When('hago una solicitud PUT a {string} con el siguiente payload:', async functi
 Then('la respuesta debería contener el producto con id {int} actualizado con nombre {string}', async function (id, nombre) {
     assertThat(this.responseBody, hasProperty('id', id));
     assertThat(this.responseBody, hasProperty('nombre', nombre));
+});
+
+When('hago una solicitud DELETE a {string}', async function (route) {
+    this.response = await app.inject({
+        method: 'DELETE',
+        url: route,
+    });
+    this.responseBody = await this.response.json();
+});
+
+Then('el producto con id {int} ya no debería existir en la base de datos', async function (id) {
+    const producto = await app.services.productosService.getItemById(id);;
+    assertThat(producto, is(null));
+});
+
+Then('la respuesta debería contener un mensaje de error {string}', async function (message) {
+    assertThat(this.responseBody, hasProperty('error', message));
 });

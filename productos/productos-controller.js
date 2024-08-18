@@ -20,7 +20,7 @@ class ProductosController {
             if (item) {
                 reply.send(item);
             } else {
-                reply.status(404).send({ error: 'Product not found' });
+                reply.status(404).send({ error: 'Producto no encontrado' });
             }
         } catch (error) {
             request.log.error(error);
@@ -58,6 +58,22 @@ class ProductosController {
             const updatedItem = await this.productosService.updateItem(id, { nombre, precio, costo, inventario });
             if (updatedItem) {
                 reply.send(updatedItem);
+            } else {
+                reply.status(404).send({ error: 'Producto no encontrado' });
+            }
+        } catch (error) {
+            request.log.error(error);
+            reply.code(500).send({ error: error.message });
+        }
+    }
+
+    async deleteItem(request, reply) {
+        try {
+            const id = request.params.id;
+
+            const result = await this.productosService.deleteItem(id);
+            if (result) {
+                reply.code(200).send({ message: 'Producto eliminado exitosamente' });
             } else {
                 reply.status(404).send({ error: 'Producto no encontrado' });
             }
