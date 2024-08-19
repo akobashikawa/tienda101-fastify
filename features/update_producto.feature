@@ -19,7 +19,7 @@ Característica: Actualizar producto
   Escenario: Actualizar un producto inexistente
     Dado que el servicio está corriendo
     Y que no existe un producto con id 9999
-    Cuando hago una solicitud PUT a "/api/productos/1" con el siguiente payload:
+    Cuando hago una solicitud PUT a "/api/productos/9999" con el siguiente payload:
       """
       {
       "nombre": "Producto Actualizado",

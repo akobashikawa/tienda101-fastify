@@ -1,3 +1,5 @@
+const { throws } = require("hamjest");
+
 class VentasService {
 
     constructor({ ventasRepository, productosService }) {
@@ -19,8 +21,16 @@ class VentasService {
 
     async createItem(data) {
         const producto = await this.productosService.getItemById(data.producto_id);
+        const productoData = producto.dataValues;
+        if (productoData.cantidad - data.cantidad < 0) {
+            throw new Error('La cantidad es mayor a la existente');
+        }
         const costo = producto.costo;
-        data.ganancia = data.precio - costo;
+        data.ganancia = data.cantidad * (data.precio - costo);
+
+        productoData.cantidad -= data.cantidad;
+        console.log({productoData})
+        await this.productosService.updateItem(productoData.id, productoData);
         return this.ventasRepository.createItem(data);
     }
 

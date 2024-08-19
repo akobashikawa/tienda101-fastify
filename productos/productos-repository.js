@@ -20,18 +20,18 @@ class ProductosRepository {
 
     async updateItem(id, data) {
         const item = await this.ProductoModel.findByPk(id);
-        if (item) {
-            return await item.update(data);
+        if (!item) {
+            return null;
         }
-        return null;
+        return item.update(data);
     }
 
     async deleteItem(id) {
         const item = await this.ProductoModel.findByPk(id);
-        if (item) {
-            return await item.destroy();
+        if (!item) {
+            return null;
         }
-        return null;
+        return item.destroy();
     }
 
 }

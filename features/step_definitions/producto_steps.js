@@ -5,14 +5,34 @@ const { assertThat, is, not, containsString, hasProperty } = require('hamjest');
 // const { app } = require('../../server');
 const app = require('../../app');
 
-async function resetTable() {
+let producto;
+
+async function resetTableProductos() {
     await app.sequelize.query('DELETE FROM Productos');
     await app.sequelize.query('DELETE FROM sqlite_sequence WHERE name="Productos"');
+    this.producto = await app.services.productosService.createItem({
+        nombre: 'Producto Nuevo',
+        costo: 10,
+        precio: 15,
+        cantidad: 10,
+    });
+}
+
+async function resetTableVentas() {
+    await resetTableProductos();
+    await app.sequelize.query('DELETE FROM Ventas');
+    await app.sequelize.query('DELETE FROM sqlite_sequence WHERE name="Ventas"');
+    this.venta = await app.services.ventasService.createItem({
+        producto_id: this.producto.id,
+        precio: 15,
+        cantidad: 1,
+    });
 }
 
 BeforeAll(async function () {
     // browser = await puppeteer.launch();
     // page = await browser.newPage();
+    // await resetTableProductos();
 });
 
 AfterAll(async function () {
@@ -21,7 +41,7 @@ AfterAll(async function () {
 });
 
 Before(async function () {
-    await resetTable();
+
 });
 
 After(async function() {
@@ -51,10 +71,8 @@ Then('la respuesta debería contener una lista de productos', async function () 
 
 
 Given('que existe un producto con id {int}', async function (id) {
-    let producto = await app.services.productosService.getItemById(id);
-    if (!producto) {
-        producto = await app.services.productosService.createItem({ nombre: 'Producto Nuevo', precio: 123.40, costo: 100.00, cantidad: 20 });
-    }
+    await resetTableProductos();
+    const producto = await app.services.productosService.getItemById(id);
     assertThat(producto.id, id);
 });
 
@@ -92,6 +110,9 @@ Then('la respuesta debería contener un producto con el id {int}', async functio
 });
 
 Given('que no existe un producto con id {int}', async function (id) {
+    try {
+        await app.services.productosService.deleteItem(id);
+    } catch(error) {}
     let producto = await app.services.productosService.getItemById(id);
     assertThat(producto, null);
 });

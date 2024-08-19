@@ -18,7 +18,7 @@ Característica: Actualizar venta
   Escenario: Actualizar un venta inexistente
     Dado que el servicio está corriendo
     Y que no existe una venta con id 9999
-    Cuando hago una solicitud PUT a "/api/ventas/1" con el siguiente payload:
+    Cuando hago una solicitud PUT a "/api/ventas/9999" con el siguiente payload:
       """
       {
       "producto_id": 1,
