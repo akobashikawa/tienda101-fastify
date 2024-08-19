@@ -10,7 +10,7 @@ Característica: Actualizar producto
       "nombre": "Producto Actualizado",
       "precio": 200.00,
       "costo": 150.00,
-      "inventario": 30
+      "cantidad": 30
       }
       """
     Entonces debería recibir una respuesta con un código de estado 200
@@ -25,7 +25,7 @@ Característica: Actualizar producto
       "nombre": "Producto Actualizado",
       "precio": 200.00,
       "costo": 150.00,
-      "inventario": 30
+      "cantidad": 30
       }
       """
     Entonces debería recibir una respuesta con un código de estado 404

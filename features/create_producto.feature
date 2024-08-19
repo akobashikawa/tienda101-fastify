@@ -9,7 +9,7 @@ Característica: Crear producto
       "nombre": "Producto Nuevo",
       "precio": 123.40,
       "costo": 100.00,
-      "inventario": 20
+      "cantidad": 20
       }
       """
     Entonces debería recibir una respuesta con un código de estado 201

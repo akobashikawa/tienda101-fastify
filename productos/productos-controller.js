@@ -30,14 +30,14 @@ class ProductosController {
 
     async createItem(request, reply) {
         try {
-            const { nombre, precio, costo, inventario } = request.body;
+            const { nombre, precio, costo, cantidad } = request.body;
 
             if (!nombre || precio < 0) {
                 reply.code(400).send({ error: 'Datos inválidos' });
                 return;
             }
 
-            const newItem = await this.productosService.createItem({ nombre, precio, costo, inventario });
+            const newItem = await this.productosService.createItem({ nombre, precio, costo, cantidad });
             reply.code(201).send(newItem);
         } catch (error) {
             request.log.error(error);
@@ -48,14 +48,14 @@ class ProductosController {
     async updateItem(request, reply) {
         try {
             const id = request.params.id;
-            const { nombre, precio, costo, inventario } = request.body;
+            const { nombre, precio, costo, cantidad } = request.body;
 
             if (!nombre || precio < 0) {
                 reply.code(400).send({ error: 'Datos inválidos' });
                 return;
             }
 
-            const updatedItem = await this.productosService.updateItem(id, { nombre, precio, costo, inventario });
+            const updatedItem = await this.productosService.updateItem(id, { nombre, precio, costo, cantidad });
             if (updatedItem) {
                 reply.send(updatedItem);
             } else {

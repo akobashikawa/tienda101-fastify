@@ -53,7 +53,7 @@ Then('la respuesta debería contener una lista de productos', async function () 
 Given('que existe un producto con id {int}', async function (id) {
     let producto = await app.services.productosService.getItemById(id);
     if (!producto) {
-        producto = await app.services.productosService.createItem({ nombre: 'Producto Nuevo', precio: 123.40, costo: 100.00, inventario: 20 });
+        producto = await app.services.productosService.createItem({ nombre: 'Producto Nuevo', precio: 123.40, costo: 100.00, cantidad: 20 });
     }
     assertThat(producto.id, id);
 });

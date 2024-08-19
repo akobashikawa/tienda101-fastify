@@ -23,7 +23,7 @@ class ProductoModel extends Model {
                 allowNull: false,
                 defaultValue: 0
             },
-            inventario: {
+            cantidad: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 defaultValue: 0
