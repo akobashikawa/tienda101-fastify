@@ -1,30 +1,30 @@
 class VentasRepository {
 
-    constructor({ VentaModel, ProductoModel }) {
-        this.VentaModel = VentaModel;
-        this.ProductoModel = ProductoModel;
+    constructor({ Venta, Producto }) {
+        this.Venta = Venta;
+        this.Producto = Producto;
     }
 
     async getItems() {
-        const items = await this.VentaModel.findAll({
+        const items = await this.Venta.findAll({
             include: [
-                { model: this.ProductoModel, as: 'Producto' }
+                { model: this.Producto, as: 'Producto' }
             ]
         });
         return items;
     }
 
     async getItemById(id) {
-        const item = await this.VentaModel.findByPk(id);
+        const item = await this.Venta.findByPk(id);
         return item;
     }
 
     async createItem(data) {
-        return this.VentaModel.create(data);
+        return this.Venta.create(data);
     }
 
     async updateItem(id, data) {
-        const item = await this.VentaModel.findByPk(id);
+        const item = await this.Venta.findByPk(id);
         if (item) {
             return await item.update(data);
         }
@@ -32,7 +32,7 @@ class VentasRepository {
     }
 
     async deleteItem(id) {
-        const item = await this.VentaModel.findByPk(id);
+        const item = await this.Venta.findByPk(id);
         if (item) {
             return await item.destroy();
         }

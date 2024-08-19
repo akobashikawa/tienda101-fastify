@@ -1,15 +1,15 @@
-const ProductoModel = require('../productos/producto-model');
-const VentaModel = require('../ventas/venta-model');
+const Producto = require('../productos/producto-model');
+const Venta = require('../ventas/venta-model');
 
 module.exports = (sequelize) => {
-    ProductoModel.init(sequelize);
-    VentaModel.init(sequelize);
+    Producto.init(sequelize);
+    Venta.init(sequelize);
 
-    ProductoModel.hasMany(VentaModel, { foreignKey: 'producto_id' });
-    VentaModel.belongsTo(ProductoModel, { foreignKey: 'producto_id' });
+    Producto.hasMany(Venta, { foreignKey: 'producto_id' });
+    Venta.belongsTo(Producto, { foreignKey: 'producto_id' });
 
     return {
-        ProductoModel,
-        VentaModel,
+        Producto,
+        Venta,
     }
 };
