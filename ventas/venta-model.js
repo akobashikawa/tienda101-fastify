@@ -1,6 +1,6 @@
 const { DataTypes, Model } = require('sequelize');
 
-class ProductoModel extends Model {
+class VentaModel extends Model {
 
     static init(sequelize) {
         return super.init({
@@ -8,15 +8,6 @@ class ProductoModel extends Model {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
                 primaryKey: true
-            },
-            nombre: {
-                type: DataTypes.STRING,
-                allowNull: false
-            },
-            costo: {
-                type: DataTypes.DECIMAL(10, 2),
-                allowNull: false,
-                defaultValue: 0
             },
             precio: {
                 type: DataTypes.DECIMAL(10, 2),
@@ -28,12 +19,21 @@ class ProductoModel extends Model {
                 allowNull: false,
                 defaultValue: 0
             },
+            fecha: {
+                type: DataTypes.DATE,
+                allowNull: false,
+                defaultValue: DataTypes.NOW
+            },
+            ganancia: {
+                type: DataTypes.DECIMAL(10, 2),
+                allowNull: false
+            },
         }, {
             sequelize,
-            modelName: 'Producto',
-            tableName: 'Productos',
+            modelName: 'Venta',
+            tableName: 'Ventas',
         });
     }
 }
 
-module.exports = ProductoModel;
+module.exports = VentaModel;

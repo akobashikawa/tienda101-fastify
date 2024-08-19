@@ -31,3 +31,9 @@ curl -X PUT http://localhost:3000/api/productos/1 -H "Content-Type: application/
 # delete
 curl -X DELETE http://localhost:3000/api/productos/1 
 ```
+
+## bash
+
+```sh
+for file in producto*; do mv $file $(echo $file | sed 's/productos-/ventas-/'); done
+```
