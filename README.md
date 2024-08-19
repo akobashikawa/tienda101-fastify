@@ -16,20 +16,28 @@
 ## curl
 
 ```sh
-# get all
+# get all productos
 curl http://localhost:3000/api/productos
 
-# create
-curl -X POST http://localhost:3000/api/productos -H "Content-Type: application/json" -d '{"nombre": "Producto Nuevo", "precio": 123.4, "costo": 100.00, "cantidad": 20}'
+# create producto
+curl -X POST http://localhost:3000/api/productos -H "Content-Type: application/json" -d '{"nombre": "Producto Nuevo", "precio": 15, "costo": 10, "cantidad": 10}'
 
-# get
+# get producto
 curl http://localhost:3000/api/productos/1
 
-# update
-curl -X PUT http://localhost:3000/api/productos/1 -H "Content-Type: application/json" -d '{"nombre": "Producto Actualizado", "precio": 200.00, "costo": 100.00, "cantidad": 30}'
+# update producto
+curl -X PUT http://localhost:3000/api/productos/1 -H "Content-Type: application/json" -d '{"nombre": "Producto Actualizado", "precio": 20, "costo": 10, "cantidad": 5}'
 
-# delete
-curl -X DELETE http://localhost:3000/api/productos/1 
+curl -X PUT http://localhost:3000/api/productos/1 -H "Content-Type: application/json" -d '{"cantidad": 6}'
+
+# delete producto
+curl -X DELETE http://localhost:3000/api/productos/1
+
+# get all ventas
+curl http://localhost:3000/api/ventas
+
+# create venta
+curl -X POST http://localhost:3000/api/venta -H "Content-Type: application/json" -d '{"producto_id": 1, "precio": 15, "cantidad": 1}'
 ```
 
 ## bash

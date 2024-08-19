@@ -29,7 +29,6 @@ class VentasService {
         data.ganancia = data.cantidad * (data.precio - costo);
 
         productoData.cantidad -= data.cantidad;
-        console.log({productoData})
         await this.productosService.updateItem(productoData.id, productoData);
         return this.ventasRepository.createItem(data);
     }

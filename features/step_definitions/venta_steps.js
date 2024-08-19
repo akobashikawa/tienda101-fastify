@@ -83,8 +83,7 @@ Then('la venta con id {int} ya no debería existir en la base de datos', async f
 
 Given('el producto con id {int} tiene una cantidad {int}', async function (id, cantidad) {
     await resetTableProductos();
-    const producto = await app.services.productosService.getItemById(id);
-    assertThat(producto.cantidad, cantidad);
+    await app.services.productosService.updateItem(id, { cantidad });
 });
 
 Then('el producto con id {int} debería tener una cantidad {int}', async function (id, cantidad) {

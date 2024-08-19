@@ -47,20 +47,34 @@ class ProductosController {
 
     async updateItem(request, reply) {
         try {
-            const id = request.params.id;
-            const { nombre, precio, costo, cantidad } = request.body;
+            const { id } = request.params;
 
-            if (!nombre || precio < 0) {
+            const producto = await this.productosService.getItemById(id);
+
+            if (!producto) {
+                reply.status(404).send({ error: 'Producto no encontrado' });
+                return;
+            }
+
+            const updatedFields = request.body;
+
+            if ((updatedFields.nombre && !updatedFields.nombre) || (updatedFields.precio && updatedFields.precio < 0)) {
                 reply.code(400).send({ error: 'Datos inválidos' });
                 return;
             }
 
-            const updatedItem = await this.productosService.updateItem(id, { nombre, precio, costo, cantidad });
-            if (updatedItem) {
-                reply.send(updatedItem);
-            } else {
-                reply.status(404).send({ error: 'Producto no encontrado' });
+            const allowedFields = ['nombre', 'costo', 'precio', 'cantidad'];
+
+            const filteredFields = {};
+
+            for (let key of Object.keys(updatedFields)) {
+                if (allowedFields.includes(key)) {
+                    filteredFields[key] = updatedFields[key];
+                }
             }
+
+            const updatedItem = await this.productosService.updateItem(id, filteredFields);
+            reply.send(updatedItem);
         } catch (error) {
             request.log.error(error);
             reply.code(500).send({ error: error.message });
