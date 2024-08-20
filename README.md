@@ -54,7 +54,7 @@ curl -X DELETE http://localhost:3000/api/personas/1
 curl http://localhost:3000/api/ventas
 
 # create venta
-curl -X POST http://localhost:3000/api/venta -H "Content-Type: application/json" -d '{"producto_id": 1, "precio": 15, "cantidad": 1}'
+curl -X POST http://localhost:3000/api/ventas -H "Content-Type: application/json" -d '{"persona_id": 1, "producto_id": 1, "precio": 15, "cantidad": 1}'
 
 
 

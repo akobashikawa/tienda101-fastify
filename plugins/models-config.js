@@ -20,7 +20,7 @@ module.exports = (sequelize) => {
 
     return {
         Producto,
-        Venta,
         Persona,
+        Venta,
     }
 };

@@ -43,7 +43,7 @@
                     <td>{{ producto.cantidad }}</td>
                     <td>
                         <button @click="openModificarProductoDialog(producto.id)">Modificar</button>
-                        <button @click="openVenderProductoDialog(producto.id)">Vender</button>
+                        <button @click="openIngresarVentaDialog({productoId: producto.id})">Vender</button>
                     </td>
                 </tr>
             </tbody>
@@ -117,37 +117,6 @@
             </form>
         </dialog>
 
-        <dialog ref="venderProductoDialog">
-            <header>
-                <h2>Vender Producto</h2>
-            </header>
-            <form method="dialog">
-                <fieldset>
-                    <legend>Producto</legend>
-                    <label>
-                        ID: {{ venta.producto_id }}
-                        <input type="hidden" placeholder="" v-model="venta.producto_id">
-                    </label>
-                    <label>
-                        Nombre: {{ producto.nombre }}
-                    </label>
-                    <label>
-                        Precio:
-                        <input type="number" step="0.10" min="0" placeholder="0.00" v-model="venta.precio">
-                    </label>
-                    <label>
-                        Cantidad:
-                        <input type="number" step="1" min="0" placeholder="1" v-model="venta.cantidad">
-                    </label>
-                </fieldset>
-                <footer>
-                    <button type="reset" @click="closeVenderProductoDialog">Cancelar</button>
-                    <button type="submit" @click="createVenta">Vender</button>
-                </footer>
-
-            </form>
-        </dialog>
-
 
         <h2>Personas</h2>
 
@@ -168,7 +137,7 @@
                     <td>{{ persona.nombre }}</td>
                     <td>
                         <button @click="openModificarPersonaDialog(persona.id)">Modificar</button>
-                        <button @click="openVenderPersonaDialog(producto.id)">Vender</button>
+                        <button @click="openIngresarVentaDialog({personaId: persona.id})">Venderle</button>
                     </td>
                 </tr>
             </tbody>
@@ -218,37 +187,6 @@
             </form>
         </dialog>
 
-        <dialog ref="venderPersonaDialog">
-            <header>
-                <h2>Vender Producto</h2>
-            </header>
-            <form method="dialog">
-                <fieldset>
-                    <legend>Producto</legend>
-                    <label>
-                        ID: {{ venta.producto_id }}
-                        <input type="hidden" placeholder="" v-model="venta.producto_id">
-                    </label>
-                    <label>
-                        Nombre: {{ producto.nombre }}
-                    </label>
-                    <label>
-                        Precio:
-                        <input type="number" step="0.10" min="0" placeholder="0.00" v-model="venta.precio">
-                    </label>
-                    <label>
-                        Cantidad:
-                        <input type="number" step="1" min="0" placeholder="1" v-model="venta.cantidad">
-                    </label>
-                </fieldset>
-                <footer>
-                    <button type="reset" @click="closeVenderPersonaDialog">Cancelar</button>
-                    <button type="submit" @click="createVenta">Vender</button>
-                </footer>
-
-            </form>
-        </dialog>
-
 
         <h2>Ventas</h2>
 
@@ -289,6 +227,15 @@
             </header>
             <form method="dialog">
                 <fieldset>
+                    <legend>Persona</legend>
+                    <label>
+                        <select v-model="venta.persona_id" @change="selectPersona">
+                            <option value="0">- Seleccionar -</option>
+                            <option :value="persona.id" v-for="persona of personas">{{ persona.nombre }}</option>
+                        </select>
+                    </label>
+                </fieldset>
+                <fieldset>
                     <legend>Producto</legend>
                     <label>
                         <select v-model="venta.producto_id" @change="selectProducto">
@@ -306,7 +253,7 @@
                     </label>
                 </fieldset>
                 <footer>
-                    <button type="reset" @click="closeVenderProductoDialog">Cancelar</button>
+                    <button type="reset" @click="closeIngresarVentaDialog">Cancelar</button>
                     <button type="submit" @click="createVenta">Vender</button>
                 </footer>
 
@@ -403,6 +350,14 @@
                     persona.value = data;
                 };
 
+                const selectPersona = () => {
+                    const persona_id = venta.value.persona_id;
+                    const found = personas.value.find(item => item.id === persona_id);
+                    if (found) {
+                        venta.value.nombre = found.nombre;
+                    }
+                };
+
                 // CREAR PERSONA
                 const persona = ref({
                     id: 0,
@@ -441,38 +396,11 @@
 
                 // CREAR VENTA
                 const venta = ref({
+                    persona_id: 0,
                     producto_id: 0,
                     precio: 0,
                     cantidad: 1,
                 });
-
-                const venderProductoDialog = ref();
-                const openVenderProductoDialog = async (id) => {
-                    await getProducto(id);
-                    venta.value = {
-                        producto_id: producto.value.id,
-                        precio: producto.value.precio,
-                        cantidad: 1,
-                    };
-                    venderProductoDialog.value.showModal();
-                };
-                const closeVenderProductoDialog = () => {
-                    venderProductoDialog.value.close();
-                };
-
-                const venderPersonaDialog = ref();
-                const openVenderPersonaDialog = async (id) => {
-                    await getProducto(id);
-                    venta.value = {
-                        producto_id: producto.value.id,
-                        precio: producto.value.precio,
-                        cantidad: 1,
-                    };
-                    venderProductoDialog.value.showModal();
-                };
-                const closeVenderPersonaDialog = () => {
-                    venderProductoDialog.value.close();
-                };
 
                 const createVenta = async () => {
                     const body = venta.value;
@@ -496,7 +424,21 @@
 
                 // INGRESAR VENTA
                 const ingresarVentaDialog = ref();
-                const openIngresarVentaDialog = () => {
+                const openIngresarVentaDialog = async ({personaId, productoId} = {}) => {
+                    if (personaId) {
+                        await getPersona(personaId);
+                        venta.value = Object.assign(venta.value, {
+                            persona_id: persona.value.id,
+                        });
+                    }
+                    if (productoId) {
+                        await getProducto(productoId);
+                        venta.value = Object.assign(venta.value, {
+                            producto_id: producto.value.id,
+                            precio: producto.value.precio,
+                            cantidad: 1,
+                        });
+                    }
                     ingresarVentaDialog.value.showModal();
                 };
                 const closeIngresarVentaDialog = () => {
@@ -529,6 +471,7 @@
                     personas,
                     persona,
                     getPersonas,
+                    selectPersona,
                     ingresarPersonaDialog,
                     openIngresarPersonaDialog,
                     closeIngresarPersonaDialog,
@@ -541,12 +484,6 @@
                     ventas,
                     venta,
                     getVentas,
-                    venderProductoDialog,
-                    openVenderProductoDialog,
-                    closeVenderProductoDialog,
-                    venderPersonaDialog,
-                    openVenderPersonaDialog,
-                    closeVenderPersonaDialog,
                     createVenta,
                     ingresarVentaDialog,
                     openIngresarVentaDialog,

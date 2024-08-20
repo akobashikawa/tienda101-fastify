@@ -1,14 +1,16 @@
 class VentasRepository {
 
-    constructor({ Venta, Producto }) {
+    constructor({ Venta, Persona, Producto }) {
         this.Venta = Venta;
+        this.Persona = Persona;
         this.Producto = Producto;
     }
 
     async getItems() {
         const items = await this.Venta.findAll({
             include: [
-                { model: this.Producto, as: 'Producto' }
+                { model: this.Persona, as: 'Persona' },
+                { model: this.Producto, as: 'Producto' },
             ]
         });
         return items;
