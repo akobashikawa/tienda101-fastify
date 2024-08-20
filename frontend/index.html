@@ -189,6 +189,7 @@
                     <legend>Producto</legend>
                     <label>
                         <select v-model="venta.producto_id" @change="selectProducto">
+                            <option value="0">- Seleccionar -</option>
                             <option :value="producto.id" v-for="producto of productos">{{ producto.nombre }}</option>
                         </select>
                     </label>
