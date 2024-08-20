@@ -197,6 +197,7 @@
             <thead>
                 <tr>
                     <th>id</th>
+                    <th>fecha</th>
                     <th>persona</th>
                     <th>producto</th>
                     <th>costo</th>
@@ -209,6 +210,7 @@
             <tbody>
                 <tr v-for="venta of ventas">
                     <td>{{ venta.id }}</td>
+                    <td>{{ formatDate(venta.fecha) }}</td>
                     <td>{{ venta.Persona.nombre }}</td>
                     <td>{{ venta.Producto.nombre }}</td>
                     <td>{{ venta.Producto.costo }}</td>
@@ -315,7 +317,20 @@
         const App = {
             setup() {
 
+                // UTILS
                 let errorMessage = ref(false);
+
+                const formatDate = (date) => {
+                    const d = new Date(date);
+                    const year = d.getFullYear();
+                    const month = String(d.getMonth() + 1).padStart(2, '0');
+                    const day = String(d.getDate()).padStart(2, '0');
+                    const hours = String(d.getHours()).padStart(2, '0');
+                    const minutes = String(d.getMinutes()).padStart(2, '0');
+
+                    return `${year}/${month}/${day} ${hours}:${minutes}`;
+                };
+
 
                 // LISTAR PRODUCTOS
                 let productos = ref([]);
@@ -469,7 +484,7 @@
 
                 // INGRESAR VENTA
                 const ingresarVentaDialog = ref();
-                const openIngresarVentaDialog = async ({personaId, productoId} = {}) => {
+                const openIngresarVentaDialog = async ({ personaId, productoId } = {}) => {
                     if (personaId) {
                         await getPersona(personaId);
                         venta.value = Object.assign(venta.value, {
@@ -516,6 +531,7 @@
 
                 return {
                     errorMessage,
+                    formatDate,
 
                     productos,
                     producto,
