@@ -45,3 +45,12 @@ curl -X POST http://localhost:3000/api/venta -H "Content-Type: application/json"
 ```sh
 for file in producto*; do mv $file $(echo $file | sed 's/productos-/ventas-/'); done
 ```
+
+## To Do
+
+- Mejorar el testing
+    - Cómo probar features aisladamente
+    - Cómo probar capas aisladamente
+- Implementar un CLI
+- Implementar scaffolding
+- Cómo sería implementar la tienda en Nest Fastify
