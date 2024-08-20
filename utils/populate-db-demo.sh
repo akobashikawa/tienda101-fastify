@@ -5,3 +5,5 @@ curl -X POST http://localhost:3000/api/productos -H "Content-Type: application/j
 curl -X POST http://localhost:3000/api/personas -H "Content-Type: application/json" -d '{"nombre": "Ana"}'
 curl -X POST http://localhost:3000/api/personas -H "Content-Type: application/json" -d '{"nombre": "Betty"}'
 curl -X POST http://localhost:3000/api/personas -H "Content-Type: application/json" -d '{"nombre": "Carmen"}'
+
+curl -X POST http://localhost:3000/api/ventas -H "Content-Type: application/json" -d '{"persona_id": 1, "producto_id": 1, "precio": 15, "cantidad": 1}'
