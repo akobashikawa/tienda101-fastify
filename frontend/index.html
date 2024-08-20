@@ -149,6 +149,107 @@
         </dialog>
 
 
+        <h2>Personas</h2>
+
+        <button @click="getPersonas()">Traer todas</button>
+        <button @click="openIngresarPersonaDialog">Ingresar Persona</button>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>nombre</th>
+                    <th>acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="persona of personas">
+                    <td>{{ persona.id }}</td>
+                    <td>{{ persona.nombre }}</td>
+                    <td>
+                        <button @click="openModificarPersonaDialog(persona.id)">Modificar</button>
+                        <button @click="openVenderPersonaDialog(producto.id)">Vender</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <dialog ref="ingresarPersonaDialog">
+            <header>
+                <h2>Ingresar Persona</h2>
+            </header>
+            <form method="dialog">
+                <legend>Nueva persona</legend>
+                <fieldset>
+                    <label>
+                        Nombre:
+                        <input type="text" placeholder="" v-model="persona.nombre">
+                    </label>
+                </fieldset>
+                <footer>
+                    <button type="reset" @click="closeIngresarPersonaDialog">Cancelar</button>
+                    <button type="submit" @click="createPersona">Guardar</button>
+                </footer>
+
+            </form>
+        </dialog>
+
+        <dialog ref="modificarPersonaDialog">
+            <header>
+                <h2>Modificar Persona</h2>
+            </header>
+            <form method="dialog">
+                <fieldset>
+                    <legend>Persona</legend>
+                    <label>
+                        ID: {{ persona.id }}
+                        <input type="hidden" placeholder="" v-model="persona.id">
+                    </label>
+                    <label>
+                        Nombre:
+                        <input type="text" placeholder="" v-model="persona.nombre">
+                    </label>
+                </fieldset>
+                <footer>
+                    <button type="reset" @click="closeModificarPersonaDialog">Cancelar</button>
+                    <button type="submit" @click="updatePersona">Guardar</button>
+                </footer>
+
+            </form>
+        </dialog>
+
+        <dialog ref="venderPersonaDialog">
+            <header>
+                <h2>Vender Producto</h2>
+            </header>
+            <form method="dialog">
+                <fieldset>
+                    <legend>Producto</legend>
+                    <label>
+                        ID: {{ venta.producto_id }}
+                        <input type="hidden" placeholder="" v-model="venta.producto_id">
+                    </label>
+                    <label>
+                        Nombre: {{ producto.nombre }}
+                    </label>
+                    <label>
+                        Precio:
+                        <input type="number" step="0.10" min="0" placeholder="0.00" v-model="venta.precio">
+                    </label>
+                    <label>
+                        Cantidad:
+                        <input type="number" step="1" min="0" placeholder="1" v-model="venta.cantidad">
+                    </label>
+                </fieldset>
+                <footer>
+                    <button type="reset" @click="closeVenderPersonaDialog">Cancelar</button>
+                    <button type="submit" @click="createVenta">Vender</button>
+                </footer>
+
+            </form>
+        </dialog>
+
+
         <h2>Ventas</h2>
 
         <button @click="getVentas()">Traer todas</button>
@@ -158,6 +259,7 @@
             <thead>
                 <tr>
                     <th>id</th>
+                    <th>persona</th>
                     <th>producto</th>
                     <th>costo</th>
                     <th>precio</th>
@@ -169,6 +271,7 @@
             <tbody>
                 <tr v-for="venta of ventas">
                     <td>{{ venta.id }}</td>
+                    <td>{{ venta.Persona.nombre }}</td>
                     <td>{{ venta.Producto.nombre }}</td>
                     <td>{{ venta.Producto.costo }}</td>
                     <td>{{ venta.precio }}</td>
@@ -217,6 +320,7 @@
 
     <script>
         const productosServiceUrl = `http://localhost:3000/api/productos`;
+        const personasServiceUrl = `http://localhost:3000/api/personas`;
         const ventasServiceUrl = `http://localhost:3000/api/ventas`;
 
         const { createApp, ref, onMounted } = Vue;
@@ -286,6 +390,55 @@
                     await getProductos();
                 };
 
+                // LISTAR PERSONAS
+                let personas = ref([]);
+
+                const getPersonas = async () => {
+                    const { data } = await axios.get(personasServiceUrl);
+                    personas.value = data;
+                };
+
+                const getPersona = async (id) => {
+                    const { data } = await axios.get(`${personasServiceUrl}/${id}`);
+                    persona.value = data;
+                };
+
+                // CREAR PERSONA
+                const persona = ref({
+                    id: 0,
+                    nombre: '',
+                });
+
+                const ingresarPersonaDialog = ref();
+                const openIngresarPersonaDialog = () => {
+                    ingresarPersonaDialog.value.showModal();
+                };
+                const closeIngresarPersonaDialog = () => {
+                    ingresarPersonaDialog.value.close();
+                };
+
+                const createPersona = async () => {
+                    const body = persona.value;
+                    const { data } = await axios.post(personasServiceUrl, body);
+                    await getPersonas();
+                };
+
+                // MODIFICAR PERSONA
+                const modificarPersonaDialog = ref();
+                const openModificarPersonaDialog = async (id) => {
+                    await getPersona(id);
+                    modificarPersonaDialog.value.showModal();
+                };
+                const closeModificarPersonaDialog = () => {
+                    modificarPersonaDialog.value.close();
+                };
+
+                const updatePersona = async () => {
+                    const body = persona.value;
+                    const { data } = await axios.put(`${personasServiceUrl}/${body.id}`, body);
+                    await getPersonas();
+                };
+
                 // CREAR VENTA
                 const venta = ref({
                     producto_id: 0,
@@ -304,6 +457,20 @@
                     venderProductoDialog.value.showModal();
                 };
                 const closeVenderProductoDialog = () => {
+                    venderProductoDialog.value.close();
+                };
+
+                const venderPersonaDialog = ref();
+                const openVenderPersonaDialog = async (id) => {
+                    await getProducto(id);
+                    venta.value = {
+                        producto_id: producto.value.id,
+                        precio: producto.value.precio,
+                        cantidad: 1,
+                    };
+                    venderProductoDialog.value.showModal();
+                };
+                const closeVenderPersonaDialog = () => {
                     venderProductoDialog.value.close();
                 };
 
@@ -339,6 +506,7 @@
 
                 onMounted(async () => {
                     await getProductos();
+                    await getPersonas();
                     await getVentas();
                 })
 
@@ -358,12 +526,27 @@
                     closeModificarProductoDialog,
                     updateProducto,
 
+                    personas,
+                    persona,
+                    getPersonas,
+                    ingresarPersonaDialog,
+                    openIngresarPersonaDialog,
+                    closeIngresarPersonaDialog,
+                    createPersona,
+                    modificarPersonaDialog,
+                    openModificarPersonaDialog,
+                    closeModificarPersonaDialog,
+                    updatePersona,
+
                     ventas,
                     venta,
                     getVentas,
                     venderProductoDialog,
                     openVenderProductoDialog,
                     closeVenderProductoDialog,
+                    venderPersonaDialog,
+                    openVenderPersonaDialog,
+                    closeVenderPersonaDialog,
                     createVenta,
                     ingresarVentaDialog,
                     openIngresarVentaDialog,
