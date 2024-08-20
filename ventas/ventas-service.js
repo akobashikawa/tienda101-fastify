@@ -23,7 +23,7 @@ class VentasService {
         const producto = await this.productosService.getItemById(data.producto_id);
         const productoData = producto.dataValues;
         if (productoData.cantidad - data.cantidad < 0) {
-            throw new Error('La cantidad es mayor a la existente');
+            throw new Error('La cantidad es mayor a las existencias');
         }
         const costo = producto.costo;
         data.ganancia = data.cantidad * (data.precio - costo);

@@ -30,4 +30,4 @@ Característica: Crear venta
       }
       """
     Entonces debería recibir una respuesta con un código de estado 500
-    Y la respuesta debería contener el mensaje de error "La cantidad es mayor a la existente"
+    Y la respuesta debería contener el mensaje de error "La cantidad es mayor a las existencias"
