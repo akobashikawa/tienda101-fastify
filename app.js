@@ -20,6 +20,7 @@ const servicesPlugin = require('./plugins/services-plugin');
 
 const productosRouter = require('./productos/productos-router');
 const ventasRouter = require('./ventas/ventas-router');
+const personasRouter = require('./personas/personas-router');
 
 
 // Configurar CORS
@@ -49,6 +50,7 @@ app.register(servicesPlugin);
 // uses app.services
 app.register(productosRouter, { prefix: '/api/productos' });
 app.register(ventasRouter, { prefix: '/api/ventas' });
+app.register(personasRouter, { prefix: '/api/personas' });
 
 app.addHook('onReady', () => {
     const sequelize = app.sequelize;

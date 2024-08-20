@@ -1,15 +1,18 @@
 const fp = require('fastify-plugin');
 const ProductosService = require('../productos/productos-service');
 const VentasService = require('../ventas/ventas-service');
+const PersonasService = require('../personas/personas-service');
 
 async function servicesPlugin(fastify, options) {
 
     const productosService = new ProductosService({...fastify.repositories});
     const ventasService = new VentasService({...fastify.repositories, productosService});
+    const personasService = new PersonasService({...fastify.repositories});
 
     const services = {
         productosService,
         ventasService,
+        personasService,
     };
 
     fastify.decorate('services', services);

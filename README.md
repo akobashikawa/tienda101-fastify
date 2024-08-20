@@ -33,11 +33,31 @@ curl -X PUT http://localhost:3000/api/productos/1 -H "Content-Type: application/
 # delete producto
 curl -X DELETE http://localhost:3000/api/productos/1
 
+
+# get all personas
+curl http://localhost:3000/api/personas
+
+# create persona
+curl -X POST http://localhost:3000/api/personas -H "Content-Type: application/json" -d '{"nombre": "Ana"}'
+
+# get persona
+curl http://localhost:3000/api/personas/1
+
+# update persona
+curl -X PUT http://localhost:3000/api/personas/1 -H "Content-Type: application/json" -d '{"nombre": "Betty"}'
+
+# delete persona
+curl -X DELETE http://localhost:3000/api/personas/1
+
+
 # get all ventas
 curl http://localhost:3000/api/ventas
 
 # create venta
 curl -X POST http://localhost:3000/api/venta -H "Content-Type: application/json" -d '{"producto_id": 1, "precio": 15, "cantidad": 1}'
+
+
+
 ```
 
 ## bash
