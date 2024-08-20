@@ -11,6 +11,8 @@ const app = fastify({
     },
 });
 const cors = require('@fastify/cors');
+const fastifyStatic = require('@fastify/static');
+const path = require('node:path');
 
 const modelsPlugin = require('./plugins/models-plugin');
 const repositoriesPlugin = require('./plugins/repositories-plugin');
@@ -27,6 +29,10 @@ app.register(cors, {
     allowedHeaders: ['Content-Type', 'Authorization'] // Headers permitidos
 });
 
+// STATIC
+app.register(fastifyStatic, {
+    root: path.join(__dirname, 'frontend'),
+});
 
 // set app.sequelize
 // set app.models
