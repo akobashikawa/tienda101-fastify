@@ -216,6 +216,7 @@
                     <td>{{ venta.cantidad }}</td>
                     <td>{{ venta.ganancia }}</td>
                     <td>
+                        <button @click="openModificarVentaDialog(venta.id)">Modificar</button>
                     </td>
                 </tr>
             </tbody>
@@ -255,6 +256,45 @@
                 <footer>
                     <button type="reset" @click="closeIngresarVentaDialog">Cancelar</button>
                     <button type="submit" @click="createVenta">Vender</button>
+                </footer>
+
+            </form>
+        </dialog>
+
+        <dialog ref="modificarVentaDialog">
+            <header>
+                <h2>Modificar Venta</h2>
+            </header>
+            <form method="dialog">
+                <fieldset>
+                    <legend>Persona</legend>
+                    <label>
+                        <select v-model="venta.persona_id" @change="selectPersona">
+                            <option value="0">- Seleccionar -</option>
+                            <option :value="persona.id" v-for="persona of personas">{{ persona.nombre }}</option>
+                        </select>
+                    </label>
+                </fieldset>
+                <fieldset>
+                    <legend>Producto</legend>
+                    <label>
+                        <select v-model="venta.producto_id" @change="selectProducto">
+                            <option value="0">- Seleccionar -</option>
+                            <option :value="producto.id" v-for="producto of productos">{{ producto.nombre }}</option>
+                        </select>
+                    </label>
+                    <label>
+                        Precio:
+                        <input type="number" step="0.10" min="0" placeholder="0.00" v-model="venta.precio">
+                    </label>
+                    <label>
+                        Cantidad:
+                        <input type="number" step="1" min="0" placeholder="1" v-model="venta.cantidad">
+                    </label>
+                </fieldset>
+                <footer>
+                    <button type="reset" @click="closeModificarVentaDialog">Cancelar</button>
+                    <button type="submit" @click="updateVenta">Guardar</button>
                 </footer>
 
             </form>
@@ -409,8 +449,8 @@
                     } catch (error) {
                         errorMessage.value = error.response.data ? error.response.data.error : false;
                     } finally {
-                        await getProductos();
                         await getVentas();
+                        await getProductos();
                     }
                 };
 
@@ -420,6 +460,11 @@
                 const getVentas = async () => {
                     const { data } = await axios.get(ventasServiceUrl);
                     ventas.value = data;
+                };
+
+                const getVenta = async (id) => {
+                    const { data } = await axios.get(`${ventasServiceUrl}/${id}`);
+                    venta.value = data;
                 };
 
                 // INGRESAR VENTA
@@ -443,6 +488,23 @@
                 };
                 const closeIngresarVentaDialog = () => {
                     ingresarVentaDialog.value.close();
+                };
+
+                // MODIFICAR VENTA
+                const modificarVentaDialog = ref();
+                const openModificarVentaDialog = async (id) => {
+                    await getVenta(id);
+                    modificarVentaDialog.value.showModal();
+                };
+                const closeModificarVentaDialog = () => {
+                    modificarVentaDialog.value.close();
+                };
+
+                const updateVenta = async () => {
+                    const body = venta.value;
+                    const { data } = await axios.put(`${ventasServiceUrl}/${body.id}`, body);
+                    await getVentas();
+                    await getProductos();
                 };
 
 
@@ -484,10 +546,15 @@
                     ventas,
                     venta,
                     getVentas,
+                    getVenta,
                     createVenta,
                     ingresarVentaDialog,
                     openIngresarVentaDialog,
                     closeIngresarVentaDialog,
+                    modificarVentaDialog,
+                    openModificarVentaDialog,
+                    closeModificarVentaDialog,
+                    updateVenta,
                 }
             },
 

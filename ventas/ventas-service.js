@@ -20,7 +20,17 @@ class VentasService {
         return this.ventasRepository.getItemById(id);
     }
 
+    calcGanancia({costo, precio, cantidad}) {
+        return cantidad * (precio - costo);
+    }
+
     async createItem(data) {
+        const persona = await this.personasService.getItemById(data.persona_id);
+
+        if (!persona) {
+            throw new Error('La persona no existe: ' + data.persona_id);
+        }
+
         const producto = await this.productosService.getItemById(data.producto_id);
 
         if (!producto) {
@@ -28,8 +38,25 @@ class VentasService {
         }
 
         const productoData = producto.dataValues;
+        if (productoData.cantidad < 0) {
+            throw new Error('No hay suficientes existencias');
+        }
         if (productoData.cantidad - data.cantidad < 0) {
-            throw new Error('La cantidad es mayor a las existencias');
+            throw new Error('No hay suficientes existencias');
+        }
+
+        data.ganancia = this.calcGanancia({costo: producto.costo, precio: data.precio, cantidad: data.cantidad});
+
+        const nuevaCantidad = productoData.cantidad - data.cantidad;
+        await this.productosService.updateItem(productoData.id, {cantidad: nuevaCantidad});
+
+        return this.ventasRepository.createItem(data);
+    }
+
+    async updateItem(id, data) {
+        const venta = await this.getItemById(id);
+        if (!venta) {
+            throw new Error('La venta no existe: ' + id);
         }
 
         const persona = await this.personasService.getItemById(data.persona_id);
@@ -38,16 +65,26 @@ class VentasService {
             throw new Error('La persona no existe: ' + data.persona_id);
         }
 
-        const costo = producto.costo;
-        data.ganancia = data.cantidad * (data.precio - costo);
+        const producto = await this.productosService.getItemById(data.producto_id);
 
-        productoData.cantidad -= data.cantidad;
-        await this.productosService.updateItem(productoData.id, productoData);
+        if (!producto) {
+            throw new Error('El producto no existe: ' + data.producto_id);
+        }
 
-        return this.ventasRepository.createItem(data);
-    }
+        const productoData = producto.dataValues;
+        if (productoData.cantidad < 0) {
+            throw new Error('No hay suficientes existencias');
+        }
+        if (productoData.cantidad - data.cantidad < 0) {
+            throw new Error('La cantidad es mayor a las existencias');
+        }
 
-    async updateItem(id, data) {
+        data.ganancia = this.calcGanancia({costo: producto.costo, precio: data.precio, cantidad: data.cantidad});
+
+        const diferencia = data.cantidad - venta.cantidad;
+        const nuevaCantidad = productoData.cantidad - diferencia;
+        await this.productosService.updateItem(productoData.id, {cantidad: nuevaCantidad});
+
         return this.ventasRepository.updateItem(id, data);
     }
 
