@@ -8,12 +8,13 @@ Característica: Actualizar venta
       """
       {
       "producto_id": 1,
-      "precio": 200.00,
-      "cantidad": 15
+      "persona_id": 1,
+      "precio": 15,
+      "cantidad": 2
       }
       """
     Entonces debería recibir una respuesta con un código de estado 200
-    Y la respuesta debería contener la venta con id 1 actualizada con cantidad 15
+    Y la respuesta debería contener la venta con id 1 actualizada con cantidad 2
 
   Escenario: Actualizar un venta inexistente
     Dado que el servicio está corriendo
@@ -22,8 +23,9 @@ Característica: Actualizar venta
       """
       {
       "producto_id": 1,
-      "precio": 200.00,
-      "cantidad": 15
+      "persona_id": 1,
+      "precio": 15,
+      "cantidad": 1
       }
       """
     Entonces debería recibir una respuesta con un código de estado 404

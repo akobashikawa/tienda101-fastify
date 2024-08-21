@@ -1,6 +1,8 @@
 class VentasController {
-    constructor({ ventasService }) {
+    constructor({ ventasService, personasService, productosService }) {
         this.ventasService = ventasService;
+        this.personasService = personasService;
+        this.productosService = productosService;
     }
 
     async getItems(request, reply) {
@@ -48,6 +50,13 @@ class VentasController {
     async updateItem(request, reply) {
         try {
             const id = request.params.id;
+
+            const venta = await this.ventasService.getItemById(id);
+            if (!venta) {
+                reply.status(404).send({ error: 'Venta no encontrada' });
+                return;
+            }
+
             const { persona_id, producto_id, precio, cantidad } = request.body;
 
             if (!persona_id, !producto_id || precio < 0) {
@@ -58,8 +67,10 @@ class VentasController {
             const updatedItem = await this.ventasService.updateItem(id, { persona_id, producto_id, precio, cantidad });
             if (updatedItem) {
                 reply.send(updatedItem);
+                return;
             } else {
                 reply.status(404).send({ error: 'Venta no encontrada' });
+                return;
             }
         } catch (error) {
             request.log.error(error);

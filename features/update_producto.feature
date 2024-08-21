@@ -8,9 +8,9 @@ Característica: Actualizar producto
       """
       {
       "nombre": "Producto Actualizado",
-      "precio": 200.00,
-      "costo": 150.00,
-      "cantidad": 30
+      "precio": 16,
+      "costo": 10,
+      "cantidad": 12
       }
       """
     Entonces debería recibir una respuesta con un código de estado 200
@@ -23,9 +23,9 @@ Característica: Actualizar producto
       """
       {
       "nombre": "Producto Actualizado",
-      "precio": 200.00,
-      "costo": 150.00,
-      "cantidad": 30
+      "precio": 16,
+      "costo": 10,
+      "cantidad": 12
       }
       """
     Entonces debería recibir una respuesta con un código de estado 404

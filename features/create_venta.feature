@@ -9,6 +9,7 @@ Característica: Crear venta
       """
       {
       "producto_id": 1,
+      "persona_id": 1,
       "precio": 15,
       "cantidad": 1
       }
@@ -25,9 +26,10 @@ Característica: Crear venta
       """
       {
       "producto_id": 1,
+      "persona_id": 1,
       "precio": 15,
       "cantidad": 1
       }
       """
     Entonces debería recibir una respuesta con un código de estado 500
-    Y la respuesta debería contener el mensaje de error "La cantidad es mayor a las existencias"
+    Y la respuesta debería contener el mensaje de error "No hay suficientes existencias"

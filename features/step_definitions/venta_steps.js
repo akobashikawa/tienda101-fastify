@@ -16,12 +16,22 @@ async function resetTableProductos() {
     });
 }
 
+async function resetTablePersonas() {
+    await app.sequelize.query('DELETE FROM Personas');
+    await app.sequelize.query('DELETE FROM sqlite_sequence WHERE name="Personas"');
+    this.persona = await app.services.personasService.createItem({
+        nombre: 'Ana',
+    });
+}
+
 async function resetTableVentas() {
     await resetTableProductos();
+    await resetTablePersonas();
     await app.sequelize.query('DELETE FROM Ventas');
     await app.sequelize.query('DELETE FROM sqlite_sequence WHERE name="Ventas"');
     this.venta = await app.services.ventasService.createItem({
         producto_id: this.producto.id,
+        persona_id: this.persona.id,
         precio: 15,
         cantidad: 1,
     });

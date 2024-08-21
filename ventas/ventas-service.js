@@ -54,21 +54,16 @@ class VentasService {
     }
 
     async updateItem(id, data) {
-        const venta = await this.getItemById(id);
-        if (!venta) {
-            throw new Error('La venta no existe: ' + id);
-        }
-
         const persona = await this.personasService.getItemById(data.persona_id);
 
         if (!persona) {
-            throw new Error('La persona no existe: ' + data.persona_id);
+            throw new Error('Persona no encontrada');
         }
 
         const producto = await this.productosService.getItemById(data.producto_id);
 
         if (!producto) {
-            throw new Error('El producto no existe: ' + data.producto_id);
+            throw new Error('Producto no encontrado');
         }
 
         const productoData = producto.dataValues;
@@ -76,7 +71,7 @@ class VentasService {
             throw new Error('No hay suficientes existencias');
         }
         if (productoData.cantidad - data.cantidad < 0) {
-            throw new Error('La cantidad es mayor a las existencias');
+            throw new Error('No hay suficientes existencias');
         }
 
         data.ganancia = this.calcGanancia({costo: producto.costo, precio: data.precio, cantidad: data.cantidad});
