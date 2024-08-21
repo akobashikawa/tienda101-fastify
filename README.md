@@ -1,5 +1,10 @@
 # Tienda101 - Fastify
 
+## Monolito
+
+- Incluye todos los servicios
+- Incluye al frontend
+
 ## Hexagonal
 
 - Un router invoca a controllers
