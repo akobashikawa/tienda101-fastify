@@ -5,6 +5,12 @@
 - Incluye todos los servicios
 - Incluye al frontend
 
+```sh
+npm install
+npm test
+npm run dev
+```
+
 ## Hexagonal
 
 - Un router invoca a controllers
@@ -68,6 +74,10 @@ curl -X POST http://localhost:3000/api/ventas -H "Content-Type: application/json
 ## bash
 
 ```sh
+# para poblar la base de datos
+./populate-db-demo.sh
+
+# para renombrar un grupo de archivos copiados
 for file in producto*; do mv $file $(echo $file | sed 's/productos-/ventas-/'); done
 ```
 
