@@ -2,6 +2,27 @@
 
 ## Monolito
 
+```mermaid
+graph TD
+    style Frontend stroke:teal
+    style Productos stroke:#89c
+    style Personas stroke:#89c 
+    style Ventas stroke:#89c
+    style database stroke:#d62
+    
+    subgraph Monolito
+        direction LR
+        Frontend
+        Productos <--> database[(Database)]
+        Personas <--> database[(Database)]
+        Ventas <--> database[(Database)]
+    end
+    
+    Frontend <--> Productos
+    Frontend <--> Personas
+    Frontend <--> Ventas
+```
+
 - Incluye todos los servicios
 - Incluye al frontend
 
@@ -23,6 +44,21 @@ npm run dev
 - Los repositories son parte de la interface de datos
 - Los services contienen la business logic
 - Los services idealmente son agnósticos a la interface de usuario y a la interface de datos
+
+```mermaid
+sequenceDiagram
+    participant Cliente
+    participant Controller
+    participant Service
+    participant Repository
+
+    Cliente->>Controller: Request
+    Controller->>Service: Llama al método del Service
+    Service->>Repository: Interactúa con la base de datos
+    Repository-->>Service: Devuelve datos
+    Service-->>Controller: Devuelve resultado
+    Controller-->>Cliente: Responde con los datos
+```
 
 ## curl
 
