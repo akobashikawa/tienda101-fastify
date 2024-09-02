@@ -24,10 +24,6 @@ class Venta extends Model {
                 allowNull: false,
                 defaultValue: DataTypes.NOW
             },
-            ganancia: {
-                type: DataTypes.DECIMAL(10, 2),
-                allowNull: false
-            },
         }, {
             sequelize,
             modelName: 'Venta',
