@@ -30,6 +30,18 @@ class Venta extends Model {
             tableName: 'Ventas',
         });
     }
+
+    toJSON() {
+        const values = super.toJSON();
+        return {
+            id: values.id,
+            producto: values.Producto,
+            persona: values.Persona,
+            precio: values.precio,
+            cantidad: values.cantidad,
+            fecha: values.fecha
+        };
+    }
 }
 
 module.exports = Venta;
