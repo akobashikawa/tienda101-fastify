@@ -67,12 +67,15 @@ class VentasService {
         if (productoData.cantidad - data.cantidad < 0) {
             throw new Error('No hay suficientes existencias');
         }
-
-        const diferencia = data.cantidad - venta.cantidad;
+        
+        const venta = await this.getItemById(id);
+        
+        const diferencia = data.cantidad - venta.dataValues.cantidad;
         const nuevaCantidad = productoData.cantidad - diferencia;
         await this.productosService.updateItem(productoData.id, {cantidad: nuevaCantidad});
-
-        return this.ventasRepository.updateItem(id, data);
+        
+        const ventaData = Object.assign(venta.dataValues, data);
+        return this.ventasRepository.updateItem(id, ventaData);
     }
 
     async deleteItem(id) {

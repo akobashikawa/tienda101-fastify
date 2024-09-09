@@ -17,7 +17,12 @@ class VentasRepository {
     }
 
     async getItemById(id) {
-        const item = await this.Venta.findByPk(id);
+        const item = await this.Venta.findByPk(id, {
+            include: [
+                { model: this.Persona, as: 'Persona' },
+                { model: this.Producto, as: 'Producto' },
+            ]
+        });
         return item;
     }
 
