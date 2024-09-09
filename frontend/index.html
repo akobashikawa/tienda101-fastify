@@ -300,6 +300,10 @@
             </form>
         </dialog>
 
+        <footer>
+            <em><a href="https://github.com/akobashikawa/tienda101-fastify" target="_blank">Tienda101 - Fastify</a></em>
+        </footer>
+
     </div>
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -478,6 +482,8 @@
                 const getVenta = async (id) => {
                     const { data } = await axios.get(`${ventasServiceUrl}/${id}`);
                     venta.value = data;
+                    venta.value.producto_id = venta.value.producto.id;
+					venta.value.persona_id = venta.value.persona.id;
                 };
 
                 // INGRESAR VENTA
