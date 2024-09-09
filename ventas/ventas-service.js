@@ -48,6 +48,12 @@ class VentasService {
     }
 
     async updateItem(id, data) {
+        const venta = await this.getItemById(id);
+
+        if (!venta) {
+            throw new Error('Venta no encontrada');
+        }
+
         const persona = await this.personasService.getItemById(data.persona_id);
 
         if (!persona) {
@@ -67,8 +73,6 @@ class VentasService {
         if (productoData.cantidad - data.cantidad < 0) {
             throw new Error('No hay suficientes existencias');
         }
-        
-        const venta = await this.getItemById(id);
         
         const diferencia = data.cantidad - venta.dataValues.cantidad;
         const nuevaCantidad = productoData.cantidad - diferencia;
